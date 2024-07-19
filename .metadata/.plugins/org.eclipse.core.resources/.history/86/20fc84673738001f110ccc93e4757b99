@@ -1,0 +1,122 @@
+package com.sonata.BankManagerLogin;
+
+import java.awt.AWTException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+ 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+public class TestDriver {
+
+	private static WebDriver driver;
+	static int passed=0;
+	
+	@BeforeClass
+	public void setUp() {
+		System.setProperty("webdriver.chrome.driver", "./src\\test\\resources\\drivers\\chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+		driver.manage().window().maximize();
+	}
+	
+	@Test(dataProvider = "testDataAddCustomer", priority=1)
+	public void managerAddCustomer(String firstName, String lastName, String pin) throws IOException, InterruptedException, AWTException{
+		ManagerLogin managerAddCustomer = new ManagerLogin(driver);
+		managerAddCustomer.addCustomerTest(firstName, lastName, pin);
+		}
+	
+	@Test(dataProvider = "testDataOpenAccount", groups="OpenAccount", priority=2)
+	public void managerOpenAccount1(String indexValueOfCustomer, String indexValueOfCurrency, String expectedOutput, ITestResult result) throws InterruptedException, IOException, AWTException {
+		OpenAccount openAcc = new OpenAccount(driver);
+		openAcc.openAccountTesting1(indexValueOfCustomer, indexValueOfCurrency, expectedOutput, result);
+	}
+	
+	@Test(groups="OpenAccount", priority=3)
+	public void managerOpenAccount2(){
+		OpenAccount openAcc = new OpenAccount(driver);
+		openAcc.openAccountTesting2();
+	}
+	
+	
+	@Test(dataProvider="testDataSearch", priority=4)
+	public void searchFirstName(String data, String category) throws InterruptedException {
+		Search search = new Search(driver);
+		search.searchTesting(data, category);
+	}
+	
+	@Test(groups="deleteCustomer", priority=5)
+	public void deleteCustomer() throws InterruptedException {
+		DeleteCustomer delete = new DeleteCustomer(driver);
+		delete.stoteData();
+		delete.deleteCustomerTesting();
+	}
+	
+	
+	@DataProvider(name="testDataSearch")
+	public Iterator<Object[]> providerSearch() throws CsvValidationException, IOException{
+		List<Object[]> data = new ArrayList();
+		
+		CSVReader reader = new CSVReader(new FileReader("./src\\test\\resources\\searchData.csv"));
+		String[] cell = reader.readNext();
+		while((cell = reader.readNext()) != null){
+			data.add(new Object[]{cell[0], cell[1]});
+		}
+		return data.iterator();
+	}
+	
+	@DataProvider(name="testDataAddCustomer")
+	public Iterator<Object[]> providerAddCustomer() throws CsvValidationException, IOException{
+		List<Object[]> data = new ArrayList();
+		
+		CSVReader reader = new CSVReader(new FileReader("./src\\test\\resources\\customerData.csv"));
+		String[] cell;
+		cell = reader.readNext();
+		while((cell = reader.readNext()) != null) {
+			String firstName = cell[0];
+			String lastName = cell[1];
+			String pin = cell[2];
+			
+			data.add(new Object[] {firstName, lastName, pin});
+		}
+		return data.iterator();		
+	}
+	
+	@DataProvider(name="testDataOpenAccount")
+	public Iterator<Object[]> providerOpenAccount() throws CsvValidationException, IOException{
+		List<Object[]> data = new ArrayList();
+		CSVReader reader = new CSVReader(new FileReader("./src\\test\\resources\\openAccountData.csv"));
+		String[] cell;
+		cell = reader.readNext();
+		while((cell = reader.readNext()) != null) {
+			data.add(new Object[] {cell[0], cell[1], cell[2]});
+		}
+		return data.iterator();
+	}
+	
+	@AfterMethod
+	public void takeScreenshot(ITestResult result) throws IOException {
+		if(result.getStatus() == ITestResult.SUCCESS) {
+			passed++;
+			System.out.println("passed " + passed);
+		}
+	}
+	
+	@AfterClass
+	public void tearDown() {
+		if(driver!=null)
+			driver.quit();
+	}
+}

@@ -1,0 +1,5 @@
+package com.sonata.ExtentReportModule;
+
+public class BankReport {
+
+}

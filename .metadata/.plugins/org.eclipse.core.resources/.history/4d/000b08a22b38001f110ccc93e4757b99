@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Banking Application Tests">
+
+    <test name="BankManagerLoginTests">
+        <classes>
+            <class name="com.sonata.BankManagerLogin.TestDriver"/>
+        </classes>
+    </test>
+    
+    <test name="CustomerLoginTests">
+        <classes>
+            <class name="com.sonata.CustomerLogin.TestDriver"/>
+        </classes>
+    </test>
+    
+</suite>

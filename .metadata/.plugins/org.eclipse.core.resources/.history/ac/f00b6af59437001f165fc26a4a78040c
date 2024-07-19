@@ -1,0 +1,109 @@
+package com.sonata.BankManagerLogin;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+
+public class Search{
+	
+	private static WebDriver driver;
+	
+	private static List<WebElement> firstNames; 
+	private static List<WebElement> lastNames;
+	private static List<WebElement> pincodes;
+	private static List<WebElement> accounts;
+	
+	Search(WebDriver driver){
+		Search.driver = driver;
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+	}
+	
+	public static void home() {
+		driver.findElement(By.xpath("/html/body/div/div/div[1]/button[1]")).click();
+	}
+	
+	public static void searchSetup() {
+		home();
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[2]/button")).click();
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/button[3]")).click();
+	}
+
+    public static void storeSearchData(){
+    	
+        WebElement table = driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/table"));
+        int noOfRows = table.findElements(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/table/tbody/tr")).size();
+        
+        firstNames = new ArrayList(); 
+        lastNames = new ArrayList();
+        pincodes = new ArrayList();
+        accounts = new ArrayList();
+        
+        List<WebElement> accounts = new ArrayList();
+        
+        for(int i=1; i<=noOfRows; i++) {
+        	firstNames.add(driver.findElement(By.cssSelector("tbody >tr:nth-child(" + i + ") > td:nth-child(" + 1 + ")")));
+        	lastNames.add(driver.findElement(By.cssSelector("tbody >tr:nth-child(" + i + ") > td:nth-child(" + 2 + ")")));
+        	pincodes.add(driver.findElement(By.cssSelector("tbody >tr:nth-child(" + i + ") > td:nth-child(" + 3 + ")")));
+        	accounts.add(driver.findElement(By.cssSelector("tbody >tr:nth-child(" + i + ") > td:nth-child(" + 4 + ")")));
+        }
+        
+//        for(WebElement element: accounts) {
+//        	List<WebElement> temp = element.findElements(By.tagName("span")) ;
+//        	for(WebElement e : temp) {
+//        		accounts.add(e.getText());
+//        	}
+//        }
+    }
+    
+    public static void enterSearch(String searchData) {
+    	driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/form/div/div/input")).sendKeys(searchData);
+    }
+    
+    public void searchTesting(String searchData, String category) {
+    	searchSetup();
+    	enterSearch(searchData);
+    	storeSearchData();
+    	
+    	
+    	try {
+    		if(category.equalsIgnoreCase("first name")) {
+        		for(WebElement e : firstNames) {
+            		if(e.getText().equalsIgnoreCase(searchData)) {
+            			Assert.assertTrue(e.isDisplayed());
+            		}
+            		Assert.assertFalse(e.isDisplayed());
+            	}
+        	}
+    		if(category.equalsIgnoreCase("last name")) {
+        		for(WebElement e : lastNames) {
+            		if(e.getText().equalsIgnoreCase(searchData)) {
+            			Assert.assertTrue(e.isDisplayed());
+            		}
+            		Assert.assertFalse(e.isDisplayed());
+            	}
+        	}
+        	
+        	if(category.equalsIgnoreCase("pincode")) {
+        		for(WebElement e : pincodes) {
+            		if(e.getText().equalsIgnoreCase(searchData)) {
+            			Assert.assertTrue(e.isDisplayed());
+            		}
+            		Assert.assertFalse(e.isDisplayed());
+            	}
+        	}
+    	}catch(StaleElementReferenceException e) {}
+    	
+    	
+//    	
+//    	if(category.equalsIgnoreCase("account number")) {
+//    		Assert.assertTrue(allAccounts.contains(searchData.toLowerCase()));
+//    	}
+    }
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Banking Application Tests]">
+  <test thread-count="5" name="BankManagerLoginTests(failed)">
+    <classes>
+      <class name="com.sonata.BankManagerLogin.TestDriver">
+        <methods>
+          <include name="managerOpenAccount2"/>
+          <include name="takeScreenshot"/>
+          <include name="tearDown"/>
+          <include name="managerAddCustomer" invocation-numbers="0 6 8 9 10 11 12 13"/>
+          <include name="setUp"/>
+        </methods>
+      </class> <!-- com.sonata.BankManagerLogin.TestDriver -->
+    </classes>
+  </test> <!-- BankManagerLoginTests(failed) -->
+  <test thread-count="5" name="CustomerLoginTests(failed)">
+    <classes>
+      <class name="com.sonata.CustomerLogin.TestDriver">
+        <methods>
+          <include name="takeScreenshot"/>
+          <include name="withdraw" invocation-numbers="0 1"/>
+          <include name="deposit" invocation-numbers="2"/>
+          <include name="tearDown"/>
+          <include name="transaction"/>
+          <include name="setUp"/>
+        </methods>
+      </class> <!-- com.sonata.CustomerLogin.TestDriver -->
+    </classes>
+  </test> <!-- CustomerLoginTests(failed) -->
+</suite> <!-- Failed suite [Banking Application Tests] -->
