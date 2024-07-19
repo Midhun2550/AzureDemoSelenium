@@ -8,10 +8,6 @@ trigger:
 
 pool:
   name: MyAgentPool
-  demands:
-    - Agent.OS -equals Windows_NT
-
-    - Selenium -exists
 
 steps:
 - task: Maven@3
