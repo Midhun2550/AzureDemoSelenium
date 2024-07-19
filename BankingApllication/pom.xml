@@ -3,6 +3,19 @@
   <groupId>BankingApllication</groupId>
   <artifactId>BankingApllication</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+
+  <biuld>
+      <plugins>
+          <plugin>
+             <configuration>
+                <suiteXmlFiles>
+                   <suiteXmlFile>BankingApllication/TestNGTestSuite.xml<suiteXmlFile>
+                </suiteXmlFiles>
+             </configuration>
+          </plugin>
+      </plugins>
+  </biuld>
+
   <dependencies>
 	  <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
       <dependency>
